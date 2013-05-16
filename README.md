@@ -23,16 +23,16 @@ The above line is a noop unless a container is defined. If a dependency is
 registered with Inj resolve it, otherwise use `require`.
 
 A container is nothing more than a hash object to contain objects, values and
-functions that looked up by an identifier.
+functions later looked up by id.
 
 ### Application Dependency Injection
 
 Inj starts with no containers. To register app wide dependencies, the root
 container must first be created and dependencies registered. In practice,
-the root container is probably all an app needs. Module specific containers
-are mostly used for testing.
+the single root container is the only container an app creates. Module specific
+containers are primarily used in testing.
 
-*container.js*
+*container.js* - Define dependencies
 
     // Create ROOT container and register dependencies
     var root = require('inj').getSetRoot();
@@ -41,19 +41,30 @@ are mostly used for testing.
     root.register('$logger', function(name) { require('logger')(name); });
     root.register('$connectionString', 'mysql://foo:password@localhost/db')
 
-*app.js*
+*app.js* - App entry point
 
-    require('./container')
-    require('./store')
+    require('./container');
+    require('./store');
 
-To use dependencies in *store.js*
+*store.js* - Use DI
 
     require = require('inj')(module, require);
-    var log = require('$logger')('mymodule');
+
+    var log = require('$logger')('store');
     var connstr = require('$connectionString');
-    log.log("Connection string", connstr)
+    log.log('Connection string', connstr)
+
+*model.js* - Use DI
+
+    require = require('inj')(module, require);
+
+    var log = require('$logger')('model');
+    log.log('Inside model')
+
 
 ### Using Depency Injection for Tests
+
+Here's an example of how to mock a built-in module.
 
 *reader.js*
 
@@ -70,14 +81,15 @@ To use dependencies in *store.js*
     // register a mock fs
     container.register('fs', {readFileSync: function() { return 'foo'; });
 
+    // test the module
     var a = require('./reader');
     assert(a.text, 'foo');
 
 
 ## CoffeeScript
 
-CoffeeScript tries to autocreate variable. The statement must be escaped
-as regular JavaScript with backticks.
+CoffeeScript autocreates variable. The statement must be escaped as regular
+JavaScript with backticks.
 
     `require = require('inj')(module, require)`
 
