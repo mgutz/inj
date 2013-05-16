@@ -1,0 +1,23 @@
+{
+  "name": "inj",
+  "version": "0.1.0",
+  "description": "KISS, `require` based dependency injector (DI)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "barc/inj"
+  },
+  "keywords": [
+    "di",
+    "dependency",
+    "injection"
+  ],
+  "author": "mario@barc.com",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~1.9.0"
+  }
+}
