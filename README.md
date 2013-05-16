@@ -28,9 +28,9 @@ functions that looked up by an identifier.
 ### Application Dependency Injection
 
 Inj starts with no containers. To register app wide dependencies, the root
-container must first be created and dependencies registered. The root
-container is a special fallback container if a module specific container is not
-defined.
+container must first be created and dependencies registered. In practice,
+the root container is probably all an app needs. Module specific containers
+are mostly used for testing.
 
 *container.js*
 
@@ -51,7 +51,6 @@ To use dependencies in *store.js*
     require = require('inj')(module, require);
     var log = require('$logger')('mymodule');
     var connstr = require('$connectionString');
-
     log.log("Connection string", connstr)
 
 ### Using Depency Injection for Tests
@@ -59,17 +58,16 @@ To use dependencies in *store.js*
 *reader.js*
 
     require = require('inj')(module, require);
-
     var fs = require('fs');
     exports.text = fs.readFileSync(__dirname + './file.txt', 'utf8');
 
 *readerTest.js*
 
-    // first create container for `reader`
+    // create module specific container
     var inj = require('inj');
     var container = inj.create(require.resolve('./reader'));
 
-    // register a mocked 'fs'
+    // register a mock fs
     container.register('fs', {readFileSync: function() { return 'foo'; });
 
     var a = require('./reader');
@@ -78,8 +76,8 @@ To use dependencies in *store.js*
 
 ## CoffeeScript
 
-CoffeeScript tries to autocreate a variable. The line above must be escaped
-as regular JavaScript
+CoffeeScript tries to autocreate variable. The statement must be escaped
+as regular JavaScript with backticks.
 
     `require = require('inj')(module, require)`
 
