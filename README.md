@@ -14,7 +14,7 @@ To install from npm
 ## Getting started
 
 To use Inj, add a single line to any file into which dependencies are
-inject
+injected
 
     // use Inj if container defined, othwerwise use require
     require = require('inj')(module, require);
@@ -23,14 +23,14 @@ The above line is a noop unless a container is defined. If a dependency is
 registered with Inj resolve it, otherwise use `require`.
 
 A container is nothing more than a hash object to contain objects, values and
-functions that can be looked up by name.
+functions that looked up by an identifier.
 
 ### Application Dependency Injection
 
 Inj starts with no containers. To register app wide dependencies, the root
-container first must be created and dependencies registered. The root
-container is a fallback container if a module-specific container is not
-defined. This will make more sense in the test example below.
+container must first be created and dependencies registered. The root
+container is a special fallback container if a module specific container is not
+defined.
 
 *container.js*
 
